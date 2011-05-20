@@ -1,3 +1,8 @@
+2011-05-20  Santosh Sivaraj  <santoshs@fossix.org>
+
+	* src/shell.c: changed "include/header.h" to "header.h", header
+	files now moved to same directory
+
 2011-05-19  Santosh Sivaraj  <santoshs@fossix.org>
 
 	* Makefile.am added automake support, and trying to maintain
