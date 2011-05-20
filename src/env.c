@@ -3,8 +3,8 @@
 #include <search.h>
 #include <execinfo.h>
 
-#include "include/env.h"
-#include "include/shell.h"
+#include "env.h"
+#include "shell.h"
 
 extern char *progname;
 

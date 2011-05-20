@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "include/shell.h"
+#include "shell.h"
 
 int parse_line (command_t *cmd)
 {

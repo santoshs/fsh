@@ -6,8 +6,8 @@
 #include <syslog.h>
 #include <stdarg.h>
 
-#include "include/env.h"
-#include "include/shell.h"
+#include "env.h"
+#include "shell.h"
 
 /*
  * Whitespace cleanup

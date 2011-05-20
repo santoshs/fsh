@@ -8,8 +8,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#include "include/shell.h"
-#include "include/env.h"
+#include "shell.h"
+#include "env.h"
 
 char *progname;
 unsigned int flags_global;

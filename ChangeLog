@@ -1,0 +1,5 @@
+2011-05-19  Santosh Sivaraj  <santoshs@fossix.org>
+
+	* Makefile.am added automake support, and trying to maintain
+	changelog entries too.
+
