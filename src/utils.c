@@ -49,7 +49,7 @@ void dump_stack (void)
 }
 
 void inline
-debug (int priority, char flags, char *s, ...)
+slog (int priority, char flags, char *s, ...)
 {
 	va_list vlist;
 	if ((flags & TRACE_DEBUG) || (flags_global & TRACE_DEBUG)) {

@@ -1,3 +1,18 @@
+2011-05-21  Santosh Sivaraj  <santoshs@fossix.org>
+
+	* src/utils.c (slog): renamed debug function to slog, made debug a
+	convinience macro for bug messages, similarly exists for fatal.
+
+	* src/shell.h (command_): changed structure member count to
+	arg_count to show it related to member args.
+	(MIN_ARG_ALLOC): minimum number of arguments to allocate memory for.
+	(MIN_ARG_ALLOC_INC): increment step for memory alloc for args
+
+	* src/shell.c: Added new function for freeing command_t and some
+	fixes for empty line crash
+
+	* src/parser.l: New file for parsing the command line
+
 2011-05-20  Santosh Sivaraj  <santoshs@fossix.org>
 
 	* src/shell.c: changed "include/header.h" to "header.h", header

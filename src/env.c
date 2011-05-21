@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <search.h>
 #include <execinfo.h>
+#include <sys/types.h>
+#include <pwd.h>
 
 #include "env.h"
 #include "shell.h"
@@ -21,9 +23,9 @@ aarray_t env_defaults[] = {
 	{"PS1", "$ "},
 	{"PS2", "> "},
 	{"LANG", "en_IN.utf8"},	/* This needs to be set dynamically */
-	{"HOME", NULL},
-	{"INPUTRC", " "},
+	{"INPUTRC", ""},
 	{"TERM", "linux"},
+	{},
 };
 
 static struct hsearch_data env;
@@ -33,6 +35,7 @@ int env_init (void)
 {
 	int i = 0;
 	ENTRY ent, *ret;
+	struct passwd *pw;
 
 	if (!hcreate_r(MAX_ENV_SIZE, &env)) {
 		fprintf(stderr, "Cannot initialise the environment\n");
@@ -52,6 +55,10 @@ int env_init (void)
 		i++;
 	}
 
+	/* Set the users home directory */
+	pw = getpwuid(getuid());
+	setenv("HOME", pw->pw_dir);
+
 	return 0;
 }
 
@@ -64,7 +71,7 @@ char * getenv (char *var)
 	ent.data = NULL;
 
 	if (!hsearch_r(ent, FIND, &ret, &env)) {
-		debug(LOG_DEBUG, TRACE_DEBUG, "Shell variable %s not set.\n",
+		debug(0, "Shell variable %s not set.\n",
 		      ent.key);
 		return NULL;
 	}

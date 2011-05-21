@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include <string.h>
 #include <malloc.h>
 #include <errno.h>
 #include <syslog.h>
@@ -21,7 +22,8 @@ char *getprompt (void)
 
 void history (char *line)
 {
-	add_history(line);
+	if (line)
+		add_history(line);
 }
 
 command_t * get_command (void)
@@ -29,6 +31,7 @@ command_t * get_command (void)
 	command_t *cmd;
 	static char *line;
 	char *tmp;
+	int ret;
 
 	if (line) {
 		free(line);
@@ -40,15 +43,17 @@ command_t * get_command (void)
 
 	cmd = malloc(sizeof(command_t));
 	if (!cmd) {
+		free(line);
+		line = NULL;
 		goto err1;
 	}
-	tmp = strip(line);
-	cmd->line = strdup(tmp);
-	if (!cmd->line)
-		goto err2;
+	memset(cmd, 0, sizeof(command_t));
 
-	if (parse_line(cmd)) {
-		fprintf(stderr, "%s: Parse error\n", progname);
+	ret = parse_line(cmd, line);
+	if (ret < 0) {		/* Empty line */
+		return cmd;
+	} else if (ret > 0) {
+		debug(BASIC_DEBUG, "Parse error");
 		/*
 		 * Not going to exit shell for parse errors
 		 * but we require history.
@@ -58,12 +63,9 @@ command_t * get_command (void)
 		cmd->line = NULL;
 		return cmd;
 	}
+	history(cmd->line);
 
 	return cmd;
-err3:
-	free(cmd->line);
-err2:
-	free(cmd);
 err1:
 	if (errno)
 		perror(progname);
@@ -71,11 +73,26 @@ err1:
 	return NULL;
 }
 
+void put_command (command_t *cmd)
+{
+	if (cmd->line)
+		free(cmd->line);
+	if (cmd->args) {
+		while (cmd->arg_count) {
+			free(cmd->args[cmd->arg_count - 1]);
+			cmd->arg_count--;
+		}
+		free(cmd->args);
+	}
+	free(cmd);
+}
+
 void shell_loop (void)
 {
 	command_t * command;
-	int do_exit = 0;
+	int do_exit = 0, i;
 
+	debug(0, "Entering shell loop");
 	while (!do_exit) {
 		command = get_command();
 		if (command == NULL) {
@@ -85,11 +102,15 @@ void shell_loop (void)
 		if (!command->line)
 			goto loop_again;
 
-		printf("%s\n", command->line);
-		history(command->line);
+		printf("%s\n", command->args[0]);
+		printf("%d\n", command->arg_count);
+		i = 1;
+		while (i < command->arg_count) {
+			printf("argument %d: %s\n", i, command->args[i]);
+			i++;
+		}
 	loop_again:
-		free(command->line);
-		free(command);
+		put_command(command);
 	}
 }
 
