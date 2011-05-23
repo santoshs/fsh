@@ -46,7 +46,7 @@ int env_init (void)
 	 * Set some defaults to a few important shell variables
 	 */
 	while (env_defaults[i].key) {
-		if (setenv(env_defaults[i].key, env_defaults[i].value)) {
+		if (set_env(env_defaults[i].key, env_defaults[i].value)) {
 			fprintf(stderr, "Cannot set default environment for "
 				"%s\n", progname);
 			hdestroy_r(&env);
@@ -62,7 +62,7 @@ int env_init (void)
 	return 0;
 }
 
-char * getenv (char *var)
+char * get_env (char *var)
 {
 	ENTRY *ret;
 	ENTRY ent;
@@ -79,7 +79,7 @@ char * getenv (char *var)
 	return (char *)ret->data;
 }
 
-int setenv (char *var, char *val)
+int set_env (char *var, char *val)
 {
 	ENTRY *ret;
 	ENTRY ent;

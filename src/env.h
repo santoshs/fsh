@@ -7,6 +7,6 @@ typedef struct aarray_ {
 	char *value;
 } aarray_t;
 
-extern char * getenv(char *);
+extern char * get_env(char *);
 
 #endif /* _ENV_H_ */

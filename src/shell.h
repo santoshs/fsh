@@ -2,6 +2,8 @@
 #define _SHELL_H_
 
 #include <syslog.h>
+
+#include "list.h"		/* Taken from the Linux Kernel */
 #define MAX_WORD_LENGTH		256
 
 /* Global flags */
@@ -13,13 +15,27 @@
 #define MIN_ARG_ALLOC_INC	8
 
 typedef struct command_ {
-	struct command_ *next;
+	struct list_head list;
 	char **args;
 	int arg_count;
 	char *line;
 	char *redir_in;
 	char *redir_out;
 } command_t;
+
+struct builtin_ {
+	struct list_head list;
+	char *cmd_str;
+	void *(*builtin_cb)(command_t *);
+};
+
+enum job_status {
+	JOB_DONE,
+	JOB_BACKGROUND,
+	JOB_FAIL,
+	NOT_FOUND,
+	EXIT,
+};
 
 extern unsigned int flags_global;
 

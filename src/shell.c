@@ -15,6 +15,9 @@
 char *progname;
 unsigned int flags_global;
 
+LIST_HEAD(jobs);
+LIST_HEAD(builtins);
+
 char *getprompt (void)
 {
 	return getenv("PS1");
@@ -55,8 +58,8 @@ command_t * get_command (void)
 	} else if (ret > 0) {
 		debug(BASIC_DEBUG, "Parse error");
 		/*
-		 * Not going to exit shell for parse errors
-		 * but we require history.
+		 * Not going to exit shell for parse errors but we require
+		 * history.
 		 */
 		history(cmd->line);
 		free(cmd->line);
@@ -87,10 +90,26 @@ void put_command (command_t *cmd)
 	free(cmd);
 }
 
+enum job_status process (command_t *cmd)
+{
+	/*
+	 * The command and arguments cannot directly be used as it can
+	 * contain '>', '>>' and '|'. Find the first non-argument in
+	 * the argument list end the arg list there
+	 */
+	/* for (i = 0; i < cmd->arg_count; i++) { */
+	/* 	if (strcmp(cmd->args[i], ">") == 0) */
+
+	//printf("%s\n", cmd->args[0]);
+	//printf("%d\n", cmd->arg_count);
+	return JOB_DONE;
+}
+
 void shell_loop (void)
 {
 	command_t * command;
 	int do_exit = 0, i;
+	enum job_status status;
 
 	debug(0, "Entering shell loop");
 	while (!do_exit) {
@@ -102,12 +121,15 @@ void shell_loop (void)
 		if (!command->line)
 			goto loop_again;
 
-		printf("%s\n", command->args[0]);
-		printf("%d\n", command->arg_count);
-		i = 1;
-		while (i < command->arg_count) {
-			printf("argument %d: %s\n", i, command->args[i]);
-			i++;
+		status = process(command);
+		switch (status) {
+		case JOB_DONE:
+		case JOB_FAIL:
+		case NOT_FOUND:
+			break;
+		case JOB_BACKGROUND:
+			list_add(&command->list, &jobs);
+			continue;
 		}
 	loop_again:
 		put_command(command);
