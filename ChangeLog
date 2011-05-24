@@ -1,3 +1,14 @@
+2011-05-25  Santosh Sivaraj  <santoshs@fossix.org>
+
+	* src/shell.h (command_): New flags variable for keeping
+	information like background job status.
+
+	* src/shell.c (do_command): New function which will be the basis
+	for processing all commands.
+
+	* src/parser.y: Did changes to parsing, with shell code around the
+	parser.
+
 2011-05-21  Santosh Sivaraj  <santoshs@fossix.org>
 
 	* src/utils.c (slog): renamed debug function to slog, made debug a

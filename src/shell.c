@@ -136,7 +136,12 @@ void shell_loop (void)
 	}
 }
 
-int main (int argc, char *argv[])
+void do_command (command_t *cmd)
+{
+	free(cmd);
+}
+
+/*int main (int argc, char *argv[])
 {
 	progname = basename(argv[0]);
 
@@ -152,4 +157,4 @@ int main (int argc, char *argv[])
 	closelog();
 
 	return 0;
-}
+}*/

@@ -14,6 +14,9 @@
 #define MIN_ARG_ALLOC		8
 #define MIN_ARG_ALLOC_INC	8
 
+/* Command flags */
+#define BACKGROUND_JOB		0x0001
+
 typedef struct command_ {
 	struct list_head list;
 	char **args;
@@ -21,6 +24,7 @@ typedef struct command_ {
 	char *line;
 	char *redir_in;
 	char *redir_out;
+	unsigned short flags;
 } command_t;
 
 struct builtin_ {

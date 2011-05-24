@@ -1,5 +1,5 @@
 bin_PROGRAMS = sshell
-sshell_SOURCES = shell.c env.c parser.y token.l utils.c shell.h env.h
+sshell_SOURCES = shell.c env.c parser.y lexer.l utils.c shell.h env.h
 LDADD = -lreadline -lfl
 
 clean:
