@@ -6,6 +6,7 @@ AC_INIT([sshell - my toy shell], [0.1], [santoshs@fossix.org], [sshell])
 AM_INIT_AUTOMAKE(sshell, 0.5)
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
+AM_CONDITIONAL(CONFIG_DEBUG, test "$enable_debug" = yes)
 
 # Checks for programs.
 AC_PROG_CC
@@ -14,7 +15,7 @@ AC_PROG_YACC
 
 # Checks for libraries.
 AC_CHECK_LIB([readline], [readline], [
-              READLINE_LIBS=-lreadline
+              AC_SUBST([READLINE_LIBS], -lreadline)
               AC_DEFINE([HAVE_LIBREADLINE], [1], [Define to 1 if you have the `readline' library (-lreadline).])
             ])
 

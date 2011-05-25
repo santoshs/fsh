@@ -1,6 +1,16 @@
 #!/bin/sh
 
-aclocal
-autoheader
-automake --add-missing --copy
-autoconf
+if [ $# -eq 0 ]; then
+    aclocal
+    autoheader
+    automake --add-missing --copy
+    autoconf
+else
+    if [ "$1" = "clean" ]; then
+        if [ -f Makefile ]; then
+            make clean maintainer-clean
+        fi
+	rm -rf rm -rf Makefile.in aclocal.m4 autom4te.cache/ config.h.in \
+	    configure depcomp install-sh missing src/Makefile.in src/parser.tab.h texput.log ylwrap
+    fi
+fi
