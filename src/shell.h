@@ -2,6 +2,7 @@
 #define _SHELL_H_
 
 #include <syslog.h>
+#include <stdlib.h>
 
 #include "list.h"		/* Taken from the Linux Kernel */
 #define MAX_WORD_LENGTH		256
@@ -17,9 +18,14 @@
 /* Command flags */
 #define BACKGROUND_JOB		0x0001
 
+typedef struct args_ {
+	struct list_head list;
+	char *arg;
+} args_t;
+
 typedef struct command_ {
 	struct list_head list;
-	char **args;
+	args_t args;
 	int arg_count;
 	char *line;
 	char *redir_in;
@@ -45,7 +51,8 @@ extern unsigned int flags_global;
 
 char *strip(char *);
 void inline slog(int, char, char *, ...);
-void put_command (command_t *);
+void put_command(command_t *);
+char *getprompt(void);
 
 /* convinient macros for debugging and logging */
 #define debug(flags, x...) slog(LOG_DEBUG, flags, ##x)

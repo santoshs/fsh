@@ -1,3 +1,12 @@
+2011-05-26  Santosh Sivaraj  <santoshs@fossix.org>
+
+	* src/parser.y (make_cmd_arg): Lots of changes, actual command
+	allocation happending here
+
+	* src/shell.h (command_): Made member args a list
+
+	* src/shell.c: Basic shell functionality with exec support
+
 2011-05-25  Santosh Sivaraj  <santoshs@fossix.org>
 
 	* src/shell.h (command_): New flags variable for keeping

@@ -57,7 +57,7 @@ int env_init (void)
 
 	/* Set the users home directory */
 	pw = getpwuid(getuid());
-	setenv("HOME", pw->pw_dir);
+	set_env("HOME", pw->pw_dir);
 
 	return 0;
 }

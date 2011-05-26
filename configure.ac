@@ -6,7 +6,15 @@ AC_INIT([sshell - my toy shell], [0.1], [santoshs@fossix.org], [sshell])
 AM_INIT_AUTOMAKE(sshell, 0.5)
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
-AM_CONDITIONAL(CONFIG_DEBUG, test "$enable_debug" = yes)
+
+AC_ARG_ENABLE([debug],
+     [  --enable-debug    Turn on debugging],
+     [case "${enableval}" in
+       yes) debug=true ;;
+       no)  debug=false ;;
+       *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
+       esac],[debug=false])
+          AM_CONDITIONAL([CONFIG_DEBUG], [test x$debug = xtrue])
 
 # Checks for programs.
 AC_PROG_CC

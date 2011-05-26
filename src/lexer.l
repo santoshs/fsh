@@ -5,7 +5,7 @@
 
 %%
 
-[a-zA-z\-\+\.\*]+	{ yylval.word = yytext; return WORD; }
+[a-zA-z0-9\-\+\.\*\,\=]+	{ yylval.word = yytext; return WORD; }
 [ \t]			{ ; }
 L?\"(\\.|[^\\"])*\"	{ yylval.word = yytext;
 			  yylval.word = yytext + 1;
