@@ -25,11 +25,13 @@ typedef struct args_ {
 
 typedef struct command_ {
 	struct list_head list;
-	args_t args;
+	args_t arg_list;
 	int arg_count;
+	char **argv;
 	char *line;
 	char *redir_in;
 	char *redir_out;
+	pid_t pid;
 	unsigned short flags;
 } command_t;
 
@@ -38,6 +40,18 @@ struct builtin_ {
 	char *cmd_str;
 	void *(*builtin_cb)(command_t *);
 };
+
+typedef struct jobs_ {
+	struct list_head list;
+	command_t *job;
+	unsigned short jid;
+	pid_t pid;		/* pid of the last command */
+	char *line;
+} jobs_t;
+
+extern command_t *current;		/* current executing job */
+extern jobs_t jobs;			/* List of background jobs */
+extern char *global_line;
 
 enum job_status {
 	JOB_DONE,
@@ -60,4 +74,16 @@ char *getprompt(void);
 		slog(LOG_CRIT, flags, ##x);	\
 		exit(EXIT_FAILURE);		\
 	} while(0)
+
+/* count the number of list elements */
+static inline int list_count(struct list_head *l)
+{
+	struct list_head *p;
+	int i = 0;
+	if (list_empty(l))
+		return 0;
+	list_for_each(p, l)
+		i++;
+	return i;
+}
 #endif /* _SHELL_H_ */
