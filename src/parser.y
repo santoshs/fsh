@@ -29,11 +29,11 @@ char *global_line;
 
 line:			{ ; }
  | command		{ do_command($1); YYACCEPT; }
+ | command '&'		{ $$->flags |= BACKGROUND_JOB; do_command($1); }
+ | command PIPE command	{ ; }
  ;
 command: WORD		{ $$ = make_cmd_arg(yylval.word, NULL); }
- | command '&'		{ $$->flags |= BACKGROUND_JOB; }
  | command WORD		{ $$ = make_cmd_arg(yylval.word, $1); }
- | command PIPE command	{ ; }
  ;
 %%
 
@@ -56,14 +56,6 @@ void shell_loop (void)
 			add_history(t);
 		free(line);
 		line = NULL;
-
-		if (!current || current->flags & BACKGROUND_JOB) {
-			current = NULL;
-			continue;
-		} else {
-			put_command(current);
-			current = NULL;
-		}
 
 		pid = waitpid(0, &state, WNOHANG);
 		list_for_each_safe(p, s, &jobs.list) {

@@ -28,11 +28,16 @@ void history (char *line)
 		add_history(line);
 }
 
+/* The main signal handler for the process group */
+
 void put_command (command_t *cmd)
 {
 	args_t *args;
 	command_t *c;
 	struct list_head *arg_pos, *cmd_pos, *arg_i, *cmd_i;
+
+	if (!cmd)
+		return;
 
 	list_for_each_safe(cmd_pos, cmd_i, &cmd->list) {
 		c = list_entry(cmd_pos, command_t, list);
@@ -133,7 +138,11 @@ void do_command (command_t *cmd)
 
 	if (cmd->flags & BACKGROUND_JOB) {
 		queue_job(cmd);
+	} else {
+		put_command(cmd);
 	}
+
+	current = NULL;
 }
 
 int main (int argc, char *argv[])
