@@ -6,6 +6,7 @@
 
 #include "list.h"		/* Taken from the Linux Kernel */
 #define MAX_WORD_LENGTH		256
+#define MAX_BUILTINS		1
 
 /* Global flags */
 #define BASIC_DEBUG		0
@@ -35,11 +36,11 @@ typedef struct command_ {
 	unsigned short flags;
 } command_t;
 
-struct builtin_ {
+typedef struct builtin_ {
 	struct list_head list;
 	char *cmd_str;
 	void *(*builtin_cb)(command_t *);
-};
+} builtin_t;
 
 typedef struct jobs_ {
 	struct list_head list;

@@ -50,7 +50,6 @@ void shell_loop (void)
 		yy_scan_string(line);
 		global_line = line;
 		yyparse();
-		yyrestart();
 		t = strip(line);
 		if (*t)
 			add_history(t);
@@ -69,6 +68,7 @@ void shell_loop (void)
 				free(j);
 			}
 		}
+		yyrestart();
 	}
 }
 
@@ -89,6 +89,8 @@ command_t * make_cmd_arg (char *s, command_t *cmd)
 	if (!s || ! *s) {
 		return NULL;
 	}
+
+	debug(BASIC_DEBUG, "Argument: %s\n", s);
 
 	if (!t) {
 		t = malloc(sizeof(command_t));

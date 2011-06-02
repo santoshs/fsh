@@ -16,6 +16,7 @@
 char *progname;
 unsigned int flags_global;
 jobs_t jobs;
+extern builtin_t builtin[];
 
 char *getprompt (void)
 {
@@ -76,6 +77,15 @@ int prepare_exec_extern(command_t *cmd)
 
 int exec_builtin(command_t *cmd)
 {
+	int i = 0;
+
+	while(i < MAX_BUILTINS) {
+		if (!strcmp(builtin[i].cmd_str, cmd->argv[0])) {
+			builtin[i].builtin_cb(cmd);
+			return 0;
+		}
+		i++;
+	}
 	return 1;
 }
 
@@ -86,6 +96,7 @@ int exec_extern (command_t *cmd)
 
 	pid = fork();
 	if (pid == 0) {
+		debug(BASIC_DEBUG, "Executing command\n");
 		if (execvp(cmd->argv[0], cmd->argv) < 0) {
 			perror(progname);
 		/* We don't want the child also to start reading input and
@@ -98,6 +109,8 @@ int exec_extern (command_t *cmd)
 	if (! cmd->flags & BACKGROUND_JOB) {
 		waitpid(pid, &status, 0);
 		debug(BASIC_DEBUG, "Child exited with status %d\n", status);
+	} else {
+		putc('\n', stderr);
 	}
 	return 0;
 }
@@ -159,6 +172,7 @@ int main (int argc, char *argv[])
 	INIT_LIST_HEAD(&jobs.list);
 
 	shell_loop();
+	fprintf(stderr, "\n");
 
 	closelog();
 
