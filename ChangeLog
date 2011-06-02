@@ -1,3 +1,11 @@
+2011-06-02  Santosh Sivaraj  <santoshs@fossix.org>
+
+	* src/shell.h (builtin_): Added a type for the structure
+
+	* src/shell.c (exec_builtin): Execute builtin command also
+
+	* src/builtins.c: Added a new file for builtin commands
+
 2011-05-27  Santosh Sivaraj  <santoshs@fossix.org>
 
 	* src/parser.y: Changes to the parser rule
