@@ -81,8 +81,7 @@ int exec_builtin(command_t *cmd)
 
 	while(i < MAX_BUILTINS) {
 		if (!strcmp(builtin[i].cmd_str, cmd->argv[0])) {
-			builtin[i].builtin_cb(cmd);
-			return 0;
+			return builtin[i].builtin_cb(cmd);
 		}
 		i++;
 	}
@@ -142,8 +141,8 @@ void do_command (command_t *cmd)
 	}
 
 	debug(BASIC_DEBUG, "Number of arguments %d\n", cmd->arg_count);
-	argv = make_array_from_list(&cmd->arg_list, cmd->arg_count);
-	cmd->argv = argv;
+	cmd->argv = make_array_from_list(&cmd->arg_list, cmd->arg_count);
+
 	if (exec_builtin(cmd)) {
 		prepare_exec_extern(cmd);
 		exec_extern(cmd);

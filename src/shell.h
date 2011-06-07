@@ -6,7 +6,7 @@
 
 #include "list.h"		/* Taken from the Linux Kernel */
 #define MAX_WORD_LENGTH		256
-#define MAX_BUILTINS		1
+#define MAX_BUILTINS		2
 
 /* Global flags */
 #define BASIC_DEBUG		0
@@ -18,6 +18,7 @@
 
 /* Command flags */
 #define BACKGROUND_JOB		0x0001
+#define REDIR_OVEREWRITE	0x0002
 
 typedef struct args_ {
 	struct list_head list;
@@ -39,7 +40,7 @@ typedef struct command_ {
 typedef struct builtin_ {
 	struct list_head list;
 	char *cmd_str;
-	void *(*builtin_cb)(command_t *);
+	int (*builtin_cb)(command_t *);
 } builtin_t;
 
 typedef struct jobs_ {
@@ -63,6 +64,7 @@ enum job_status {
 };
 
 extern unsigned int flags_global;
+extern char *progname;
 
 char *strip(char *);
 void inline slog(int, char, char *, ...);

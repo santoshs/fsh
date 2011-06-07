@@ -1,3 +1,7 @@
+2011-06-07  Santosh Sivaraj  <santoshs@fossix.org>
+
+	* src/builtins.c (builtin_echo): Added echo builtin command
+
 2011-06-02  Santosh Sivaraj  <santoshs@fossix.org>
 
 	* src/shell.h (builtin_): Added a type for the structure
