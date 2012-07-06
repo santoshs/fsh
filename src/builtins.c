@@ -11,10 +11,10 @@ int builtin_cd (command_t *cmd)
 	return 0;
 }
 
-/* TODO: Check for environment variables and shell variables */
 int builtin_echo (command_t *cmd)
 {
 	int oflags = 0, fd = 1, i;
+	char *arg;
 
 	if (cmd->redir_out) {
 		if (cmd->flags & REDIR_OVEREWRITE)
@@ -29,8 +29,15 @@ int builtin_echo (command_t *cmd)
 	}
 
 	for (i = 1; i < cmd->arg_count; i++) {
-		write(fd, cmd->argv[i], strlen(cmd->argv[i]));
-		write(fd, " ", strlen(" "));
+		arg = cmd->argv[i];
+		if (arg[0] == '$')
+			/* Request for an environment variable */
+			arg = getenv(&arg[1]);
+
+		if (arg) {
+			write(fd, arg, strlen(arg));
+			write(fd, " ", strlen(" "));
+		}
 	}
 	write(fd, "\n", strlen("\n"));
 
