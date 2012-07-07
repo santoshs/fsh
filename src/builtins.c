@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
+#include <stdio.h>
 
 int builtin_cd (command_t *cmd)
 {
@@ -11,10 +12,12 @@ int builtin_cd (command_t *cmd)
 	return 0;
 }
 
+extern int last_exit;
 int builtin_echo (command_t *cmd)
 {
 	int oflags = 0, fd = 1, i;
-	char *arg;
+	char *arg, *str;
+	char temp[100];
 
 	if (cmd->redir_out) {
 		if (cmd->flags & REDIR_OVEREWRITE)
@@ -29,13 +32,20 @@ int builtin_echo (command_t *cmd)
 	}
 
 	for (i = 1; i < cmd->arg_count; i++) {
-		arg = cmd->argv[i];
-		if (arg[0] == '$')
+		str = arg = cmd->argv[i];
+		if (arg[0] == '$') {
 			/* Request for an environment variable */
-			arg = getenv(&arg[1]);
-
-		if (arg) {
-			write(fd, arg, strlen(arg));
+			str = getenv(&arg[1]);
+			if (!str) {
+				/* Oops! no env, something else? */
+				if (arg[1] == '?') {
+					sprintf(temp, "%d", last_exit);
+					str = temp;
+				}
+			}
+		}
+		if (str) {
+			write(fd, str, strlen(str));
 			write(fd, " ", strlen(" "));
 		}
 	}

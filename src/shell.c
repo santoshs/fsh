@@ -17,6 +17,7 @@ char *progname;
 unsigned int flags_global;
 jobs_t jobs;
 extern builtin_t builtin[];
+int last_exit;
 
 char *getprompt (void)
 {
@@ -68,13 +69,26 @@ void queue_job (command_t *cmd)
 }
 
 /*
- * Redirections, pipes
+ * TODO Redirections, pipes
  */
 int prepare_exec_extern(command_t *cmd)
 {
 	return 0;
 }
 
+bool is_builtin(command_t *cmd)
+{
+	int i = 0;
+
+	while (i < MAX_BUILTINS) {
+		if (!strcmp(builtin[i].cmd_str, cmd->argv[0])) {
+			return TRUE;
+		}
+		i++;
+	}
+
+	return FALSE;
+}
 int exec_builtin(command_t *cmd)
 {
 	int i = 0;
@@ -85,13 +99,13 @@ int exec_builtin(command_t *cmd)
 		}
 		i++;
 	}
-	return 1;
+	return -1;
 }
 
 int exec_extern (command_t *cmd)
 {
 	pid_t pid;
-	int status;
+	int status = 0;
 
 	pid = fork();
 	if (pid == 0) {
@@ -99,7 +113,7 @@ int exec_extern (command_t *cmd)
 		if (execvp(cmd->argv[0], cmd->argv) < 0) {
 			perror(progname);
 		/* We don't want the child also to start reading input and
-		 * fork children */
+		 * fork children if exec fails*/
 			exit(errno);
 		}
 	}
@@ -107,11 +121,12 @@ int exec_extern (command_t *cmd)
 	cmd->pid = pid;
 	if (! cmd->flags & BACKGROUND_JOB) {
 		waitpid(pid, &status, 0);
+		cmd->retval = WIFEXITED(status) ? WEXITSTATUS(status) : 255;
 		debug(BASIC_DEBUG, "Child exited with status %d\n", status);
 	} else {
 		putc('\n', stderr);
 	}
-	return 0;
+	return status;
 }
 
 char **make_array_from_list (args_t *args, int count)
@@ -135,6 +150,7 @@ void do_command (command_t *cmd)
 	char **argv;
 	int i;
 	pid_t pid;
+	int status = 0;
 
 	if (!cmd) {
 		return;
@@ -143,14 +159,17 @@ void do_command (command_t *cmd)
 	debug(BASIC_DEBUG, "Number of arguments %d\n", cmd->arg_count);
 	cmd->argv = make_array_from_list(&cmd->arg_list, cmd->arg_count);
 
-	if (exec_builtin(cmd)) {
+	if (is_builtin(cmd))
+		status = exec_builtin(cmd);
+	else {
 		prepare_exec_extern(cmd);
-		exec_extern(cmd);
+		status = exec_extern(cmd);
 	}
 
 	if (cmd->flags & BACKGROUND_JOB) {
 		queue_job(cmd);
 	} else {
+		last_exit = WEXITSTATUS(status);
 		put_command(cmd);
 	}
 

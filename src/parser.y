@@ -8,7 +8,7 @@
 
 #define YYERROR_VERBOSE
 
-command_t * make_cmd_arg (char *, command_t *);
+command_t * make_cmd_arg(char *, command_t *);
 void yyerror(char const *);
 
 command_t *current;

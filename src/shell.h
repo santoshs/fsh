@@ -20,6 +20,12 @@
 #define BACKGROUND_JOB		0x0001
 #define REDIR_OVEREWRITE	0x0002
 
+/* Some types */
+typedef enum {
+	FALSE = 0,
+	TRUE,
+} bool;
+
 typedef struct args_ {
 	struct list_head list;
 	char *arg;
@@ -29,6 +35,7 @@ typedef struct command_ {
 	struct list_head list;
 	args_t arg_list;
 	int arg_count;
+	int retval;		/* TODO make use of this variable*/
 	char **argv;
 	char *line;
 	char *redir_in;
