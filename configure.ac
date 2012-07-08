@@ -1,8 +1,8 @@
-#                                               -*- Autoconf -*-
+#                  -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.66])
-AC_INIT([sshell - my toy shell], [0.1], [santoshs@fossix.org], [sshell])
+AC_INIT([sshell - my toy shell], [0.1], [santosh@fossix.org], [sshell])
 AM_INIT_AUTOMAKE(sshell, 0.5)
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])

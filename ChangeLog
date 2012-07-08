@@ -1,8 +1,16 @@
-2011-06-07  Santosh Sivaraj  <santoshs@fossix.org>
+2012-07-08  Santosh Sivaraj  <santosh@fossix.org>
+
+	* src/builtins.c (builtin_echo): Fixed echo command to get env
+	variables or other special variables
+
+	* src/shell.h (command_): added variable to hold return value for
+	commands, will find use later.
+
+2011-06-07  Santosh Sivaraj  <santosh@fossix.org>
 
 	* src/builtins.c (builtin_echo): Added echo builtin command
 
-2011-06-02  Santosh Sivaraj  <santoshs@fossix.org>
+2011-06-02  Santosh Sivaraj  <santosh@fossix.org>
 
 	* src/shell.h (builtin_): Added a type for the structure
 
@@ -10,7 +18,7 @@
 
 	* src/builtins.c: Added a new file for builtin commands
 
-2011-05-27  Santosh Sivaraj  <santoshs@fossix.org>
+2011-05-27  Santosh Sivaraj  <santosh@fossix.org>
 
 	* src/parser.y: Changes to the parser rule
 
@@ -20,7 +28,7 @@
 
 	* src/shell.c: added background job addition/deletion
 
-2011-05-26  Santosh Sivaraj  <santoshs@fossix.org>
+2011-05-26  Santosh Sivaraj  <santosh@fossix.org>
 
 	* src/parser.y (make_cmd_arg): Lots of changes, actual command
 	allocation happending here
@@ -29,7 +37,7 @@
 
 	* src/shell.c: Basic shell functionality with exec support
 
-2011-05-25  Santosh Sivaraj  <santoshs@fossix.org>
+2011-05-25  Santosh Sivaraj  <santosh@fossix.org>
 
 	* src/shell.h (command_): New flags variable for keeping
 	information like background job status.
@@ -40,7 +48,7 @@
 	* src/parser.y: Did changes to parsing, with shell code around the
 	parser.
 
-2011-05-21  Santosh Sivaraj  <santoshs@fossix.org>
+2011-05-21  Santosh Sivaraj  <santosh@fossix.org>
 
 	* src/utils.c (slog): renamed debug function to slog, made debug a
 	convinience macro for bug messages, similarly exists for fatal.
@@ -55,12 +63,12 @@
 
 	* src/parser.l: New file for parsing the command line
 
-2011-05-20  Santosh Sivaraj  <santoshs@fossix.org>
+2011-05-20  Santosh Sivaraj  <santosh@fossix.org>
 
 	* src/shell.c: changed "include/header.h" to "header.h", header
 	files now moved to same directory
 
-2011-05-19  Santosh Sivaraj  <santoshs@fossix.org>
+2011-05-19  Santosh Sivaraj  <santosh@fossix.org>
 
 	* Makefile.am added automake support, and trying to maintain
 	changelog entries too.
