@@ -21,7 +21,7 @@ int last_exit;
 
 char *getprompt (void)
 {
-	return get_env("PS1");
+	return getenv("PS1");
 }
 
 void history (char *line)
