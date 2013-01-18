@@ -1,5 +1,6 @@
-bin_PROGRAMS = sshell
-sshell_SOURCES = shell.c env.c parser.c lexer.l utils.c shell.h env.h builtins.c
+bin_PROGRAMS = fsh
+fsh_SOURCES = shell.c env.c parser.c lexer.l utils.c shell.h env.h builtins.c
+LEXLIB = @LEXLIB@
 LDADD = @READLINE_LIBS@ $(LEXLIB)
 
 if CONFIG_DEBUG

@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.66])
-AC_INIT([sshell - my toy shell], [0.1], [santosh@fossix.org], [sshell])
-AM_INIT_AUTOMAKE(sshell, 0.5)
+AC_INIT([fshell - my toy shell], [0.1], [ssantosh@fossix.org], [fshell])
+AM_INIT_AUTOMAKE(fshell, 0.5)
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 
@@ -25,6 +25,11 @@ AC_PROG_YACC
 AC_CHECK_LIB([readline], [readline], [
               AC_SUBST([READLINE_LIBS], -lreadline)
               AC_DEFINE([HAVE_LIBREADLINE], [1], [Define to 1 if you have the `readline' library (-lreadline).])
+            ])
+
+AC_CHECK_LIB([flex], [fl], [
+              AC_SUBST([LEXLIBS], -lfl)
+              AC_DEFINE([HAVE_LIBFLEX], [1], [Define to 1 if you have the `flex' library (-lfl).])
             ])
 
 # Checks for header files.
