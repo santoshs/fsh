@@ -50,8 +50,7 @@ void dump_stack (void)
 	free (strings);
 }
 
-void inline
-slog (int priority, char flags, char *s, ...)
+void slog(int priority, char flags, char *s, ...)
 {
 	va_list vlist;
 	if ((flags & TRACE_DEBUG) || (flags_global & TRACE_DEBUG)) {

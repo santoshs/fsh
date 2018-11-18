@@ -73,10 +73,12 @@ enum job_status {
 extern unsigned int flags_global;
 extern char *progname;
 
-char *strip(char *);
-void inline slog(int, char, char *, ...);
-void put_command(command_t *);
-char *getprompt(void);
+extern char *strip(char *);
+extern void slog(int, char, char *, ...);
+extern void put_command(command_t *);
+extern char *getprompt(void);
+extern int env_init(void);
+extern void shell_loop(void);
 
 /* convinient macros for debugging and logging */
 #define debug(flags, x...) slog(LOG_DEBUG, flags, ##x)

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <execinfo.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include <pwd.h>
 
 #include "env.h"
